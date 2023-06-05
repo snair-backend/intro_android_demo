@@ -1,4 +1,5 @@
 # Earthly Build Script for our Android App
+VERSION 0.7
 
 FROM adoptopenjdk/openjdk11:alpine AS builder
 
