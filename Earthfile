@@ -9,7 +9,7 @@ WORKDIR /app
 
 build:
     # Install Android SDK
-    ARG ANDROID_SDK_VERSION=commandlinetools-linux-6858069_latest.zip
+    ARG ANDROID_SDK_VERSION=tools_r25.2.3-linux.zip
     ARG ANDROID_BUILD_TOOLS_VERSION=30.0.3
     ARG ANDROID_PLATFORM_VERSION=android-30
     ARG ANDROID_HOME=/opt/android-sdk
