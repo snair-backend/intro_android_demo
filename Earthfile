@@ -1,16 +1,13 @@
 # Earthly Build Script for our Android App
 VERSION 0.7
-
-FROM adoptopenjdk/openjdk11:alpine AS builder
+FROM adoptopenjdk/openjdk11:alpine
+RUN apk update && apk add --no-cache \
+    git \
+    curl \
+    unzip
+WORKDIR /app
 
 build:
-    # Set up build environment
-    WORKDIR /app
-    RUN apk update && apk add --no-cache \
-        git \
-        curl \
-        unzip
-
     # Install Android SDK
     ARG ANDROID_SDK_VERSION=commandlinetools-linux-6858069_latest.zip
     ARG ANDROID_BUILD_TOOLS_VERSION=30.0.3
@@ -35,18 +32,8 @@ build:
     # Build the Android app
     RUN make release
 
-    # Production stage
-    FROM adoptopenjdk/openjdk11:alpine
-
-    # Set up production environment
-    WORKDIR /app
-
     # Copy the built APK from the builder stage
-    COPY --from=builder /app/app/build/outputs/apk/release/app-release.apk /app/app-release.apk
-
-    # Install the required tools for Google Play API
-    RUN apk update && apk add --no-cache \
-        curl
+    # COPY --from=builder /app/app/build/outputs/apk/release/app-release.apk /app/app-release.apk
 
     # Set up the Google Play API credentials
     # ARG GOOGLE_PLAY_API_KEY
@@ -61,10 +48,10 @@ build:
     #    "https://www.googleapis.com/upload/androidpublisher/v3/applications/[PACKAGE_NAME]/edits/[EDIT_ID]/apks"
 
     # Define the build target for Earthly
-    FROM scratch AS earthly
-    COPY --from=builder /app /app
-    WORKDIR /app
-    ENTRYPOINT ["/usr/local/bin/earthly"]
+    # FROM scratch AS earthly
+    # COPY --from=builder /app /app
+    # WORKDIR /app
+    # ENTRYPOINT ["/usr/local/bin/earthly"]
 
     # Default Earthly target
     # FROM earthly AS default
