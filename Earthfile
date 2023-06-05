@@ -32,3 +32,38 @@ COPY . /app
 
 # Build the Android app
 RUN make release
+
+# Production stage
+FROM adoptopenjdk/openjdk11:alpine
+
+# Set up production environment
+WORKDIR /app
+
+# Copy the built APK from the builder stage
+COPY --from=builder /app/app/build/outputs/apk/release/app-release.apk /app/app-release.apk
+
+# Install the required tools for Google Play API
+RUN apk update && apk add --no-cache \
+    curl
+
+# Set up the Google Play API credentials
+# ARG GOOGLE_PLAY_API_KEY
+# ENV GOOGLE_PLAY_API_KEY=${GOOGLE_PLAY_API_KEY}
+
+# Upload the APK to Google Play Store
+# RUN curl --fail \
+#    -X POST \
+#    -H "Authorization: Bearer ${GOOGLE_PLAY_API_KEY}" \
+#    -H "Content-Type: application/octet-stream" \
+#    --data-binary "@/app/app-release.apk" \
+#    "https://www.googleapis.com/upload/androidpublisher/v3/applications/[PACKAGE_NAME]/edits/[EDIT_ID]/apks"
+
+# Define the build target for Earthly
+FROM scratch AS earthly
+COPY --from=builder /app /app
+WORKDIR /app
+ENTRYPOINT ["/usr/local/bin/earthly"]
+
+# Default Earthly target
+FROM earthly AS default
+CMD +build
