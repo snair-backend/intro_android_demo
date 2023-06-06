@@ -3,7 +3,7 @@ name: Android Build and Deploy
 on:
   push:
     branches:
-      - main
+      - master
 
 env:
   ANDROID_HOME: ${{ runner.workspace }}/android-sdk
