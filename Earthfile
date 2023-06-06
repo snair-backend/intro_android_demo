@@ -3,7 +3,8 @@ FROM adoptopenjdk/openjdk11:alpine
 RUN apk update && apk add --no-cache \
     git \
     curl \
-    unzip
+    unzip \
+    make
 WORKDIR /app
 
 build:
