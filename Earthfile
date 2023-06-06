@@ -20,10 +20,10 @@ build:
     ENV PATH=${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/platform-tools:${PATH}
 
     # Accept Android SDK licenses
-    RUN yes | sdkmanager --licenses
+    # RUN yes | sdkmanager --licenses
 
     # Download necessary Android SDK components
-    RUN sdkmanager "build-tools;${ANDROID_BUILD_TOOLS_VERSION}" "platforms;${ANDROID_PLATFORM_VERSION}"
+    # RUN sdkmanager "build-tools;${ANDROID_BUILD_TOOLS_VERSION}" "platforms;${ANDROID_PLATFORM_VERSION}"
 
     # Copy the app source code
     COPY . /app
