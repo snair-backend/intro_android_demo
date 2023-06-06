@@ -5,8 +5,8 @@ on:
     branches:
       - master
 
-env:
-  ANDROID_HOME: ${{ runner.workspace }}/android-sdk
+#env:
+#  ANDROID_HOME: ${{ runner.workspace }}/android-sdk
 
 jobs:
   build:
