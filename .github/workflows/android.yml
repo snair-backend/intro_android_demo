@@ -19,11 +19,11 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
-          java-version: 17
+          java-version: 12
           distribution: 'temurin'
 
       - name: Set up Android SDK
-        uses: android-actions/setup-android@v2
+        uses: android-actions/setup-android@v3
         with:
           sdk-platform: 'platforms;android-30'
           sdk-build-tools: '30.0.3'
@@ -49,7 +49,7 @@ jobs:
 
       - name: Sign and align APK
         run: |
-          make assembleRelease
+          make release
 
       #- name: Deploy APK
       #  uses: actions/upload-artifact@v2
