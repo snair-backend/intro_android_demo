@@ -1,9 +1,6 @@
 VERSION 0.7
 FROM ubuntu:22.04
-RUN apk update && apk add --no-cache \
-    git \
-    curl \
-    unzip
+
 WORKDIR /app
 
 build:
