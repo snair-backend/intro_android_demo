@@ -1,32 +1,58 @@
-name: Build and Deploy
+name: Android Build and Deploy
 
 on:
   push:
     branches:
-      - master
+      - main
+
+env:
+  ANDROID_HOME: ${{ runner.workspace }}/android-sdk
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set up JDK
+      - name: Set up JDK 11
         uses: actions/setup-java@v3
         with:
-          java-version: 17
-          distribution: 'temurin'
+          java-version: '11'
 
-      - name: Install Earthly
-        run: |
-          wget https://github.com/earthly/earthly/releases/latest/download/earthly-linux-amd64
-          chmod +x earthly-linux-amd64
-          sudo mv earthly-linux-amd64 /usr/local/bin/earthly
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v2
+        with:
+          sdk-platform: 'platforms;android-30'
+          sdk-build-tools: '30.0.3'
 
-      - name: Build and Deploy
+      # - name: Install jq
+      #  run: sudo apt-get install jq -y
+
+      # - name: Decode and write google-services.json
+      #  run: |
+      #    echo "${{ secrets.GOOGLE_SERVICE_JSON }}" | base64 --decode > android/app/google-services.json
+
+      # - name: Set up environment variables
+      #  run: |
+      #    echo "MY_ANDROID_KEYSTORE=$(echo -n ${{ secrets.MY_ANDROID_KEYSTORE }} | base64 --decode)" >> $GITHUB_ENV
+      #    echo "MY_ANDROID_KEYSTORE_PASSWORD=${{ secrets.MY_ANDROID_KEYSTORE_PASSWORD }}" >> $GITHUB_ENV
+      #    echo "MY_ANDROID_KEYSTORE_KEY_ALIAS=${{ secrets.MY_ANDROID_KEYSTORE_KEY_ALIAS }}" >> $GITHUB_ENV
+      #    echo "MY_ANDROID_KEYSTORE_KEY_PASSWORD=${{ secrets.MY_ANDROID_KEYSTORE_KEY_PASSWORD }}" >> $GITHUB_ENV
+
+      - name: Build and test
         run: |
-         # export GOOGLE_PLAY_API_KEY=${{ secrets.GOOGLE_PLAY_API_KEY }}
-         # earthly --build-arg GOOGLE_PLAY_API_KEY="${GOOGLE_PLAY_API_KEY}" +default
-          earthly +build
+          chmod +x ./gradlew
+          make build
+
+      - name: Sign and align APK
+        run: |
+          make assembleRelease
+
+      #- name: Deploy APK
+      #  uses: actions/upload-artifact@v2
+      #  with:
+      #    name: app-release
+      #    path: Android/app/build/outputs/apk/release/app-release.apk
+
