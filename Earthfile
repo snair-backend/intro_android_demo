@@ -1,5 +1,5 @@
 VERSION 0.7
-FROM adoptopenjdk/openjdk11:alpine
+FROM ubuntu:22.04
 RUN apk update && apk add --no-cache \
     git \
     curl \
@@ -8,10 +8,10 @@ WORKDIR /app
 
 build:
     # Install Android SDK
-    ARG ANDROID_SDK_VERSION=commandlinetools-linux-6858069_latest.zip
-    ARG ANDROID_BUILD_TOOLS_VERSION=30.0.3
-    ARG ANDROID_PLATFORM_VERSION=android-30
-    ARG ANDROID_HOME=/opt/android-sdk
+    # ARG ANDROID_SDK_VERSION=commandlinetools-linux-6858069_latest.zip
+    # ARG ANDROID_BUILD_TOOLS_VERSION=30.0.3
+    # ARG ANDROID_PLATFORM_VERSION=android-30
+    # ARG ANDROID_HOME=/opt/android-sdk
 
     # RUN curl -L https://dl.google.com/android/repository/${ANDROID_SDK_VERSION} -o /tmp/android-sdk.zip \
     #    && unzip -q /tmp/android-sdk.zip -d ${ANDROID_HOME} \
