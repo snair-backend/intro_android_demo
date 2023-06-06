@@ -17,7 +17,7 @@ build:
         && unzip -q /tmp/android-sdk.zip -d ${ANDROID_HOME} \
         && rm /tmp/android-sdk.zip
 
-    ENV PATH=${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/platform-tools:${PATH}
+    ENV PATH=${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/cmdline-tools/latest/tools/bin:${ANDROID_HOME}/platform-tools:${PATH}
 
     # Accept Android SDK licenses
     RUN yes | sdkmanager --licenses
